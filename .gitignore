@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/API_Key_Secrets_Loader/Access_Secret.txt
+/API_Key_Secrets_Loader/Access_Token.txt
+/API_Key_Secrets_Loader/API_Keys.txt
+/API_Key_Secrets_Loader/Client_Ids.txt
+/API_Key_Secrets_Loader/Consumer_Keys.txt
+/API_Key_Secrets_Loader/Consumer_Secrets.txt
