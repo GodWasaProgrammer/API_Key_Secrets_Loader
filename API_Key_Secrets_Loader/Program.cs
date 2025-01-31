@@ -16,9 +16,10 @@ internal class Program
         string ConsumerSecrets = $"{Dir}/Consumer_Secrets";
         string AccessToken = $"{Dir}/Access_Token";
         string AccessSecret = $"{Dir}/Access_Secret";
+        string ClientIDs = $"{Dir}/Client_Ids";
 
         // create if it doesnt exist
-        List<string> LoadList = new() { ApiKeys, ConsumerKeys, ConsumerSecrets, AccessToken, AccessSecret };
+        List<string> LoadList = new() { ApiKeys, ConsumerKeys, ConsumerSecrets, AccessToken, AccessSecret, ClientIDs };
         foreach (string file in LoadList)
         {
             if (!File.Exists(file))
@@ -32,6 +33,7 @@ internal class Program
         Dictionary<string, string> Consumer_Secrets = LoadApiKeys(ConsumerSecrets);
         Dictionary<string, string> Access_Tokens = LoadApiKeys(AccessToken);
         Dictionary<string, string> Access_Secrets = LoadApiKeys(AccessSecret);
+        Dictionary<string, string> Client_Ids = LoadApiKeys(ClientIDs);
     }
 
     static Dictionary<string, string> LoadApiKeys(string filePath)
