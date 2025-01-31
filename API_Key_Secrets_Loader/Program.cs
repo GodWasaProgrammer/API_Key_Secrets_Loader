@@ -12,11 +12,11 @@ internal class Program
 
         // Define paths
         string ApiKeys = $"{Dir}/API_Keys.txt";
-        string ConsumerKeys = $"{Dir}/Consumer_Keys";
-        string ConsumerSecrets = $"{Dir}/Consumer_Secrets";
-        string AccessToken = $"{Dir}/Access_Token";
-        string AccessSecret = $"{Dir}/Access_Secret";
-        string ClientIDs = $"{Dir}/Client_Ids";
+        string ConsumerKeys = $"{Dir}/Consumer_Keys.txt";
+        string ConsumerSecrets = $"{Dir}/Consumer_Secrets.txt";
+        string AccessToken = $"{Dir}/Access_Token.txt";
+        string AccessSecret = $"{Dir}/Access_Secret.txt";
+        string ClientIDs = $"{Dir}/Client_Ids.txt";
 
         // create if it doesnt exist
         List<string> LoadList = new() { ApiKeys, ConsumerKeys, ConsumerSecrets, AccessToken, AccessSecret, ClientIDs };
