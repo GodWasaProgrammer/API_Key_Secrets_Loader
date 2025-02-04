@@ -15,6 +15,7 @@ public sealed class KeyLoader
     public readonly IReadOnlyDictionary<string, string> ACCESS_Secrets;
     public readonly IReadOnlyDictionary<string, string> CLIENT_Ids;
     public readonly IReadOnlyDictionary<string, string> ACCOUNT_Names;
+    public readonly IReadOnlyDictionary<string, string> Webhooks;
 
     private KeyLoader()
     {
@@ -25,6 +26,7 @@ public sealed class KeyLoader
         ACCESS_Secrets = LoadApiKeys("Access_Secret.txt");
         CLIENT_Ids = LoadApiKeys("Client_Ids.txt");
         ACCOUNT_Names = LoadApiKeys("Accounts.txt");
+        Webhooks = LoadApiKeys("Webhooks.txt");
     }
 
     private static Dictionary<string, string> LoadApiKeys(string filePath)
