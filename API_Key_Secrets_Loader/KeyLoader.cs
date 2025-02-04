@@ -1,97 +1,56 @@
 ﻿namespace API_Key_Secrets_Loader;
 
-public static class KeyLoader
+public sealed class KeyLoader
 {
     public static void Main()
     {
-
+        throw new NotSupportedException();
     }
 
-    public static Dictionary<string, string> API_Keys = [];
-    public static Dictionary<string, string> CONSUMER_Keys = [];
-    public static Dictionary<string, string> CONSUMER_Secrets = [];
-    public static Dictionary<string, string> ACCESS_Tokens = [];
-    public static Dictionary<string,string> ACCESS_Secrets = [];
-    public static Dictionary<string,string> CLIENT_Ids = [];
-    public static Dictionary<string,string> ACCOUNT_Names = [];
+    public static readonly KeyLoader Instance = new();
+    public readonly IReadOnlyDictionary<string, string> API_Keys;
+    public readonly IReadOnlyDictionary<string, string> CONSUMER_Keys;
+    public readonly IReadOnlyDictionary<string, string> CONSUMER_Secrets;
+    public readonly IReadOnlyDictionary<string, string> ACCESS_Tokens;
+    public readonly IReadOnlyDictionary<string, string> ACCESS_Secrets;
+    public readonly IReadOnlyDictionary<string, string> CLIENT_Ids;
+    public readonly IReadOnlyDictionary<string, string> ACCOUNT_Names;
 
-    public static void BuildKeys()
+    private KeyLoader()
     {
-        //var Dir = Directory.GetCurrentDirectory();
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    Dir = Path.GetDirectoryName(Dir);
-        //}
-
-        var Dir = "C:/Users/vemha/source/repos/API_Key_Secrets_Loader/API_Key_Secrets_Loader";
-
-        // Define paths
-        string ApiKeys = $"{Dir}/API_Keys.txt";
-        string ConsumerKeys = $"{Dir}/Consumer_Keys.txt";
-        string ConsumerSecrets = $"{Dir}/Consumer_Secrets.txt";
-        string AccessToken = $"{Dir}/Access_Token.txt";
-        string AccessSecret = $"{Dir}/Access_Secret.txt";
-        string ClientIDs = $"{Dir}/Client_Ids.txt";
-        string Accounts = $"{Dir}/Accounts.txt";
-
-        // create if it doesnt exist
-        //List<string> LoadList = new() { ApiKeys, ConsumerKeys, ConsumerSecrets, AccessToken, AccessSecret, ClientIDs, Accounts };
-        //foreach (string file in LoadList)
-        //{
-        //    if (!File.Exists(file))
-        //    {
-        //        File.Create(file).Dispose(); // Stäng strömmen direkt
-        //    }
-        //}
-        // load your local keys, Do NOT push these to github
-        Dictionary<string, string> Api_Keys = LoadApiKeys(ApiKeys);
-        API_Keys = Api_Keys;
-        Dictionary<string, string> Consumer_Keys = LoadApiKeys(ConsumerKeys);
-        CONSUMER_Keys = Consumer_Keys;
-        Dictionary<string, string> Consumer_Secrets = LoadApiKeys(ConsumerSecrets);
-        CONSUMER_Secrets = Consumer_Secrets;
-        Dictionary<string, string> Access_Tokens = LoadApiKeys(AccessToken);
-        ACCESS_Tokens = Access_Tokens;
-        Dictionary<string, string> Access_Secrets = LoadApiKeys(AccessSecret);
-        ACCESS_Secrets = Access_Secrets;
-        Dictionary<string, string> Client_Ids = LoadApiKeys(ClientIDs);
-        CLIENT_Ids = Client_Ids;
-        Dictionary<string, string> Account_Names = LoadApiKeys(Accounts);
-        ACCOUNT_Names = Account_Names;
+        API_Keys = LoadApiKeys("API_Keys.txt");
+        CONSUMER_Keys = LoadApiKeys("Consumer_Keys.txt");
+        CONSUMER_Secrets = LoadApiKeys("Consumer_Secrets.txt");
+        ACCESS_Tokens = LoadApiKeys("Access_Token.txt");
+        ACCESS_Secrets = LoadApiKeys("Access_Secret.txt");
+        CLIENT_Ids = LoadApiKeys("Client_Ids.txt");
+        ACCOUNT_Names = LoadApiKeys("Accounts.txt");
     }
 
-    static Dictionary<string, string> LoadApiKeys(string filePath)
+    private static Dictionary<string, string> LoadApiKeys(string filePath)
     {
         var apiKeys = new Dictionary<string, string>();
 
-        try
+        if (!File.Exists(filePath))
         {
-            foreach (var line in File.ReadLines(filePath))
+            throw new FileNotFoundException($"Key file not found: {filePath}");
+        }
+
+        foreach (var line in File.ReadLines(filePath))
+        {
+            if (string.IsNullOrWhiteSpace(line) || !line.Contains("=")) continue;
+
+            var parts = line.Split('=', 2);
+            if (parts.Length == 2)
             {
-                // Ignorera tomma rader eller rader utan '='
-                if (string.IsNullOrWhiteSpace(line) || !line.Contains("="))
-                    continue;
+                string key = parts[0].Trim();
+                string value = parts[1].Trim();
 
-                var parts = line.Split('=', 2);
-                if (parts.Length == 2)
+                if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
                 {
-                    string key = parts[0].Trim();
-                    string value = parts[1].Trim();
-
-                    if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
-                    {
-                        apiKeys[key] = value;
-                    }
+                    apiKeys[key] = value;
                 }
             }
-        }
-        catch (FileNotFoundException)
-        {
-            Console.WriteLine($"Error: File not found at {filePath}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error reading API keys: {ex.Message}");
         }
 
         return apiKeys;
